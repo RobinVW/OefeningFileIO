@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace OefeningFileIO
 {
@@ -35,11 +36,32 @@ namespace OefeningFileIO
         */
         static void Main(string[] args)
         {
-           
+            Input input = new Input();
+            //  C:\Users\RobinVW\Documents\FileIO
+            Console.WriteLine("Geef het path naar de input folder:");
+            var inputPath = Console.ReadLine();
+            // InputFolder
+            Console.WriteLine("Geef de naam van de input folder in:");
+            var inputNaam = Console.ReadLine();
+            input.InputFolder = input.MaakFolderAan(inputNaam, inputPath);
+
+            Console.WriteLine("Geef het path naar de ouput folder:");
+            var outputPath = Console.ReadLine();
+            // InputFolder
+            Console.WriteLine("Geef de naam van de ouput folder in:");
+            var outputNaam = Console.ReadLine();
+            input.OutputFolder = input.MaakFolderAan(outputNaam, outputPath);
+
+            //zip location:
+            //  C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Animals.zip
+            //unzip folder
+            //  C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder
+            input.ExtractZipToFolder("C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Animals.zip", "C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder");
         }
 
-        public void MaakInputFolderAan() { 
-            
+        public DirectoryInfo MaakFolderAan(string folderNaam, string folderPath) {
+
+            return Directory.CreateDirectory(folderPath + "\\" + folderNaam);
         }
     }
 }
