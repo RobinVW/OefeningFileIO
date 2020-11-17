@@ -13,11 +13,14 @@ namespace OefeningFileIO
         public bool IsClass { get; set; }
         public bool IsInterface { get; set; }
         public FileInfo FileInfo { get; set; }
+        //bool die bijhoudt of het geen cs file is die automatisch is aangemaakt
+        public bool IsValid { get; set; }
 
         public CodeFileInfo() {
             LinesOfCode = 0;
             IsClass = false;
             IsInterface = false;
+            IsValid = false;
         }
         public override string ToString()
         {

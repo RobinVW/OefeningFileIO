@@ -66,9 +66,12 @@ namespace OefeningFileIO
             //unzip folder
             //  C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder
             //input.ExtractZipToFolder("C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Animals.zip", "C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder");
-            string workFolderPath = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\Unzip Folder\";
-            input.ExtractZipToFolder("C:\\Users\\robin\\OneDrive\\Documenten\\FileIO\\Work folder\\Animals.zip", workFolderPath);
-            input.WorkFolder = new DirectoryInfo(workFolderPath);
+            string workFolderPathPC = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\Unzip Folder\";
+            string zipFilePathPC = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\\Animals.zip";
+            string workFolderPathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Unzip Folder";
+            string zipFilePathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Animals.zip";
+            input.ExtractZipToFolder(zipFilePathLAPTOP, workFolderPathLAPTOP);
+            input.WorkFolder = new DirectoryInfo(workFolderPathLAPTOP);
 
             Folder fl = new Folder();
             fl.GetAllCSharpFiles(input.WorkFolder);
@@ -78,7 +81,19 @@ namespace OefeningFileIO
             {
                 Console.WriteLine(file.ToString());
                 CodeFileInfo cfi = program.GetCodeFileInfo(file);
-                Console.WriteLine(cfi.ToString());
+                //Console.WriteLine(cfi.ToString());
+                Console.WriteLine(cfi.IsValid);
+                if (cfi.IsValid) {
+                    File f = new File();
+                    f.maakFileString(file);
+                    var FileString = f.FileString;
+                    FileString = f.GetUsingStatements(FileString);
+                    f.ClassInfo.Namespace = cfi.Namespace;
+                    f.ClassInfo.Name = cfi.Name;
+                    FileString = f.RemoveNamespace(FileString);
+                    Console.WriteLine(FileString);
+                    f.ClassInfo.Show();
+                }
             }
         }
 
@@ -92,10 +107,12 @@ namespace OefeningFileIO
                     if (line.Trim().Length > 0) lineCount++;
                     if (line.Contains(" class ")) {
                         cfi.IsClass = true;
+                        cfi.IsValid = true;
                         cfi.Name = line.Substring(line.IndexOf("class") + 6).Trim().Split(new char[] { ' ', ':', ';', '{' }, StringSplitOptions.None)[0];
                     }
                     if (line.Contains(" interface ")) {
                         cfi.IsInterface = true;
+                        cfi.IsValid = true;
                         cfi.Name = line.Substring(line.IndexOf("class") + 10).Trim().Split(new char[] { ' ', ':', ';', '{' }, StringSplitOptions.None)[0];
                     }
                     if (line.Contains("namespace ")) {
@@ -111,7 +128,6 @@ namespace OefeningFileIO
                         }
                     }
                 }
-            
                 cfi.LinesOfCode = lineCount;
                 return cfi;
             }
