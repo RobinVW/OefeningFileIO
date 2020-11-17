@@ -70,8 +70,8 @@ namespace OefeningFileIO
             string zipFilePathPC = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\\Animals.zip";
             string workFolderPathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Unzip Folder";
             string zipFilePathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Animals.zip";
-            input.ExtractZipToFolder(zipFilePathLAPTOP, workFolderPathLAPTOP);
-            input.WorkFolder = new DirectoryInfo(workFolderPathLAPTOP);
+            input.ExtractZipToFolder(zipFilePathPC, workFolderPathPC);
+            input.WorkFolder = new DirectoryInfo(workFolderPathPC);
 
             Folder fl = new Folder();
             fl.GetAllCSharpFiles(input.WorkFolder);
@@ -82,7 +82,6 @@ namespace OefeningFileIO
                 Console.WriteLine(file.ToString());
                 CodeFileInfo cfi = program.GetCodeFileInfo(file);
                 //Console.WriteLine(cfi.ToString());
-                Console.WriteLine(cfi.IsValid);
                 if (cfi.IsValid) {
                     File f = new File();
                     f.maakFileString(file);
@@ -91,6 +90,10 @@ namespace OefeningFileIO
                     f.ClassInfo.Namespace = cfi.Namespace;
                     f.ClassInfo.Name = cfi.Name;
                     FileString = f.RemoveNamespace(FileString);
+                    FileString = f.RemoveClassOrInterfaceName(FileString);
+                    while (FileString.Length != 0) { 
+                        FileString = f.GetParameterPropertyOrMethod(FileString);
+                    }
                     Console.WriteLine(FileString);
                     f.ClassInfo.Show();
                 }
