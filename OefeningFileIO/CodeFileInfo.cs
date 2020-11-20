@@ -22,6 +22,7 @@ namespace OefeningFileIO
             IsInterface = false;
             IsValid = false;
         }
+
         public override string ToString()
         {
             string str = "";

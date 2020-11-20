@@ -11,6 +11,8 @@ namespace OefeningFileIO
     {
         public FileInfo[] Files { get; set; }
 
+        public List<ClassInfo> ClassInfoList { get; set; } = new List<ClassInfo>();
+
         public Folder() { }
 
         public void GetAllCSharpFiles(DirectoryInfo directory) {

@@ -8,8 +8,6 @@ namespace OefeningFileIO
         public DirectoryInfo InputFolder { get; set; }
         public DirectoryInfo OutputFolder { get; set; }
 
-        public DirectoryInfo WorkFolder { get; set; }
-
         public Input() { 
         }
         public DirectoryInfo MaakFolderAan(string folderNaam, string folderPath)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -39,7 +40,7 @@ namespace OefeningFileIO
         {
             Program program = new Program();
             Input input = new Input();
-            /*
+            
              
              
             //  C:\Users\RobinVW\Documents\FileIO
@@ -51,32 +52,26 @@ namespace OefeningFileIO
             Console.WriteLine("Geef de naam van de input folder in:");
             var inputNaam = Console.ReadLine();
             input.InputFolder = input.MaakFolderAan(inputNaam, inputPath);
-
+            //OutputFolder
             Console.WriteLine("Geef het path naar de ouput folder:");
             var outputPath = Console.ReadLine();
-            // InputFolder
             Console.WriteLine("Geef de naam van de ouput folder in:");
             var outputNaam = Console.ReadLine();
             input.OutputFolder = input.MaakFolderAan(outputNaam, outputPath);
-            
-            */
 
-            //zip location:
-            //  C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Animals.zip
-            //unzip folder
-            //  C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder
-            //input.ExtractZipToFolder("C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Animals.zip", "C:\\Users\\RobinVW\\Documents\\FileIO\\Work folder\\Unzip Folder");
-            string workFolderPathPC = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\Unzip Folder\";
-            string zipFilePathPC = @"C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\\Animals.zip";
-            string workFolderPathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Unzip Folder";
-            string zipFilePathLAPTOP = @"C:\Users\RobinVW\Documents\FileIO\Work folder\Animals.zip";
-            input.ExtractZipToFolder(zipFilePathPC, workFolderPathPC);
-            input.WorkFolder = new DirectoryInfo(workFolderPathPC);
+            //Desktop:
+            //C:\Users\robin\OneDrive\Documenten\FileIO\Work folder\Animals.zip
+            Console.WriteLine("Geef het path naar de zipfile in:");
+            var zipFilePath = Console.ReadLine();
+
+            input.ExtractZipToFolder(zipFilePath, input.InputFolder.FullName);
+            
 
             Folder fl = new Folder();
-            fl.GetAllCSharpFiles(input.WorkFolder);
+            fl.GetAllCSharpFiles(input.InputFolder);
 
-
+            Output op = new Output();
+            
             foreach (FileInfo file in fl.Files)
             {
                 Console.WriteLine(file.ToString());
@@ -96,8 +91,12 @@ namespace OefeningFileIO
                     }
                     Console.WriteLine(FileString);
                     f.ClassInfo.Show();
+                    fl.ClassInfoList.Add(f.ClassInfo);
                 }
             }
+            op.WriteClassInfoOutput(fl.ClassInfoList, input.OutputFolder.FullName, $"ClassInfo{zipFilePath.Split('\\').Last().Split('.')[0]}");
+
+
         }
 
         private CodeFileInfo GetCodeFileInfo(FileInfo fi){
